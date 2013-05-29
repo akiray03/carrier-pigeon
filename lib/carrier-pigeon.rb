@@ -38,9 +38,10 @@ class CarrierPigeon
     end
   end
 
-  def message(channel, message, notice = false)
+  def message(channel, message, notice = false, encoding = nil)
     command = notice ? "NOTICE" : "PRIVMSG"
-    sendln "#{command} #{channel} :#{message}"
+    cmd = "#{command} #{channel} :#{message}"
+    sendln encoding ? cmd.encode(encoding) : cmd
   end
 
   def die
@@ -63,7 +64,7 @@ class CarrierPigeon
         "PRIVMSG NICKSERV :IDENTIFY #{options[:nickserv_password]}"
     end
     pigeon = new(options)
-    pigeon.message(options[:channel], options[:message], options[:notice])
+    pigeon.message(options[:channel], options[:message], options[:notice], options[:encoding])
     pigeon.die
   end
 
